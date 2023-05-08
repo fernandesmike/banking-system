@@ -12,30 +12,36 @@ public class ReceiptPrinter implements Printable {
 
     @Override
     public void print(){
-        System.out.println("=========================");
-        receipt.generateTransacId();
-        receipt.generateTimestamp();
+        System.out.println("======== TRANSACTION DETAILS ========");
+        System.out.println(receipt.generateTransacId());
+        System.out.println(receipt.generateTimestamp());
 
         if (receipt.getTransactionType() == TransactionType.DEPOSIT) {
-            generateDepositContents();
+            System.out.println(generateDepositContents());
         }
 
         else if (receipt.getTransactionType() == TransactionType.WITHDRAW) {
-            generateWithdrawContents();
+            System.out.println(generateWithdrawContents());
         }
     }
 
     private String generateDepositContents(){
-        return String.format("==================================" +
-                "Transaction type  : ACCOUNT %s " +
-                "Deposit amount    : %.2f" +
-                "New balance       : %.2f" , receipt.getTransactionType().toString(), receipt.getAmount(), receipt.getNewBalance());
+        return String.format("""
+                =====================================
+                Transaction type  : ACCOUNT %s\s
+                Deposit amount    : %.2f
+                Original balance  : %.2f
+                New balance       : %.2f
+                =====================================""", receipt.getTransactionType().toString(), receipt.getAmount(), receipt.getOriginalBalance(), receipt.getNewBalance());
     }
 
     private String generateWithdrawContents(){
-        return String.format("==================================" +
-                "Transaction type  : ACCOUNT %s " +
-                "Withdraw amount   : %.2f" +
-                "New balance       : %.2f" , receipt.getTransactionType().toString(), receipt.getAmount(), receipt.getNewBalance());
+        return String.format("""
+                =====================================
+                Transaction type  : ACCOUNT %s\s
+                Withdraw amount   : %.2f
+                Original balance  : %.2f
+                New balance       : %.2f
+                =====================================""", receipt.getTransactionType().toString(), receipt.getAmount(), receipt.getOriginalBalance(), receipt.getNewBalance());
     }
 }

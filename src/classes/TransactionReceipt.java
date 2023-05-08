@@ -15,16 +15,20 @@ public class TransactionReceipt implements ReceiptOperations {
     private final BankAccount account;
     private final TransactionType transactionType;
     private final double amount;
+    private final double originalBalance;
 
-    public TransactionReceipt(BankAccount account, double amount,TransactionType transactionType ) {
+    public TransactionReceipt(BankAccount account, double amount, double originalBalance,TransactionType transactionType ) {
         this.account = account;
         this.transactionType = transactionType;
         this.amount = amount;
+        this.originalBalance = originalBalance;
     }
 
     public double getNewBalance() {
         return account.getBalance();
     }
+
+    public double getOriginalBalance() { return originalBalance; }
 
     public TransactionType getTransactionType(){
         return transactionType;
@@ -40,7 +44,7 @@ public class TransactionReceipt implements ReceiptOperations {
         LocalTime time = LocalTime.now();
         LocalDate date = LocalDate.now();
 
-        return "Timestamp: " + date + "  " + time.format(DateTimeFormatter.ofPattern("hh:mm a"));
+        return "Timestamp     : " + date + "  " + time.format(DateTimeFormatter.ofPattern("hh:mm a"));
     }
 
     @Override
