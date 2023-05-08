@@ -1,4 +1,4 @@
-package classes;
+package classes.secured;
 
 import classes.secured.BankAccount;
 

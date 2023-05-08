@@ -11,7 +11,7 @@ import customexceptions.*;
 
 public class BankAccountTransaction implements BankOperations {
 
-    private BankAccount account;
+    private final BankAccount account;
     private TransactionReceipt receipt;
 
     public BankAccountTransaction(BankAccount account) {

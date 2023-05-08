@@ -1,6 +1,6 @@
 package utilities;
 
-import classes.AccountHolder;
+import classes.secured.AccountHolder;
 import interfaces.Printable;
 
 public class AccountHolderPrinter implements Printable {

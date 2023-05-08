@@ -1,13 +1,11 @@
 package classes.secured;
 
-import classes.AccountHolder;
-
 public class BankAccount {
 
     private final AccountHolder holder;
     private double balance;
 
-    public BankAccount(AccountHolder holder, double balance ) {
+    protected BankAccount(AccountHolder holder, double balance ) {
         this.holder = holder;
         this.balance = balance;
     }

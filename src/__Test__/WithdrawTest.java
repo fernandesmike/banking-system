@@ -1,6 +1,5 @@
 package __Test__;
 
-import classes.*;
 import classes.secured.*;
 import customexceptions.*;
 import utilities.*;
