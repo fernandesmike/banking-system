@@ -1,9 +1,10 @@
 package interfaces;
 
-import classes.secured.BankAccount;
+import classes.TransactionReceipt;
+import customexceptions.*;
 
 public interface AtmOperations {
-    void acceptDeposit(double amount);
-    void acceptWithdrawal(double amount);
-    void printAccountInfo(BankAccount account);
+    TransactionReceipt acceptDeposit(double amount) throws DepositLimitExceededException, BalanceLimitExceededException;
+    TransactionReceipt acceptWithdrawal(double amount) throws WithdrawalLimitExceededException, InsufficientBalanceException;
+    void printAccountInfo();
 }

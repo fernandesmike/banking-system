@@ -1,29 +1,46 @@
 package classes;
 
 import classes.secured.BankAccount;
+import classes.secured.BankAccountTransaction;
+import customexceptions.*;
 import interfaces.AtmOperations;
+import utilities.AccountHolderPrinter;
 
 public class AutomatedTellerMachine implements AtmOperations {
 
-    /*
-    *   An Object representation of an actual ATM which performs basic transaction operations
-    *   such as Deposit, Withdrawals, Printing account info, and Generating transaction receipts
+    /*  TODO:
+    *   Make ATM a Singleton
     * */
 
-    private BankAccount account;
+    private TransactionReceipt receipt;
+    private final BankAccountTransaction transaction;
+    private final BankAccount account;
 
-    @Override
-    public void acceptDeposit(double amount) {
-
+    public AutomatedTellerMachine(BankAccount account) {
+        this.account = account;
+        transaction = new BankAccountTransaction(this.account);
     }
 
     @Override
-    public void acceptWithdrawal(double amount) {
+    public TransactionReceipt acceptDeposit(double amount) throws DepositLimitExceededException, BalanceLimitExceededException {
 
+        receipt = transaction.deposit(amount);
+
+        return  receipt;
     }
 
     @Override
-    public  void printAccountInfo(BankAccount account) {
+    public TransactionReceipt acceptWithdrawal(double amount) throws WithdrawalLimitExceededException, InsufficientBalanceException {
 
+        receipt = transaction.withdraw(amount);
+
+        return  receipt;
+    }
+
+    @Override
+    public  void printAccountInfo() {
+
+        AccountHolderPrinter printer = new AccountHolderPrinter(this.account.getHolder());
+        printer.print();
     }
 }
