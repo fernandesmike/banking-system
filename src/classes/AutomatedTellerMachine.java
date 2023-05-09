@@ -5,42 +5,80 @@ import classes.secured.BankAccountTransaction;
 import customexceptions.*;
 import interfaces.AtmOperations;
 import utilities.AccountHolderPrinter;
+import utilities.ReceiptPrinter;
 
 public class AutomatedTellerMachine implements AtmOperations {
 
     /*  TODO:
     *   Make ATM a Singleton
+    *
+    *   Show menu
+    *   Welcome screen
+    *   Printer of receipt
+    *   Transaction summary
     * */
 
     private TransactionReceipt receipt;
-    private final BankAccountTransaction transaction;
-    private final BankAccount account;
+    private BankAccountTransaction transaction;
+    private BankAccount account;
+    private static AutomatedTellerMachine instance = null;
 
-    public AutomatedTellerMachine(BankAccount account) {
+    private AutomatedTellerMachine(){}
+
+    public static AutomatedTellerMachine getInstance() {
+        if (instance == null) {
+            instance = new AutomatedTellerMachine();
+        }
+        return instance;
+    }
+
+    @Override
+    public void showMenu() {
+        System.out.println("""
+                =================================
+                            WELCOME!
+                =================================
+                
+                What would you like to do today?
+                1) Withdraw (max. 5,000)
+                2) Deposit  (max. 10,000)
+                
+                Please insert your card...
+                
+                =================================
+                """);
+    }
+
+    @Override
+    public void insertCard(BankAccount account) {
         this.account = account;
-        transaction = new BankAccountTransaction(this.account);
+        this.transaction = new BankAccountTransaction(account);
     }
 
     @Override
-    public TransactionReceipt acceptDeposit(double amount) throws DepositLimitExceededException, BalanceLimitExceededException {
-
+    public void acceptDeposit(double amount) throws DepositLimitExceededException, BalanceLimitExceededException {
         receipt = transaction.deposit(amount);
-
-        return  receipt;
     }
 
     @Override
-    public TransactionReceipt acceptWithdrawal(double amount) throws WithdrawalLimitExceededException, InsufficientBalanceException {
-
+    public void acceptWithdrawal(double amount) throws WithdrawalLimitExceededException, InsufficientBalanceException {
         receipt = transaction.withdraw(amount);
-
-        return  receipt;
     }
 
     @Override
     public  void printAccountInfo() {
-
         AccountHolderPrinter printer = new AccountHolderPrinter(this.account.getHolder());
         printer.print();
+    }
+
+    @Override
+    public void printReceipt() {
+        if (receipt != null) {
+            ReceiptPrinter receiptPrinter = new ReceiptPrinter(receipt);
+            receiptPrinter.print();
+        }
+        else {
+            System.out.println("No operation performed. Thank you for using our system!");
+        }
     }
 }

@@ -13,17 +13,18 @@ public class AtmTest {
 
         AccountHolder accountHolder = new AccountHolder("Andrew", 3000);
         BankAccount account = accountHolder.getAccount();
-        BankAccount newAccount = accountHolder.getAccount();
 
         TransactionReceipt receipt = null;
         ReceiptPrinter receiptPrinter = null;
 
-        AutomatedTellerMachine atm = new AutomatedTellerMachine(account);
+        AutomatedTellerMachine atm = AutomatedTellerMachine.getInstance();
+        atm.insertCard(account);
 
         try {
-           receipt = atm.acceptWithdrawal(3000);
-           receiptPrinter = new ReceiptPrinter(receipt);
-           receiptPrinter.print();
+
+           atm.acceptWithdrawal(3000);
+           atm.printReceipt();
+
         } catch (WithdrawalLimitExceededException | InsufficientBalanceException e) {
             System.out.println(e.getMessage());
         }
