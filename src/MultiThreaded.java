@@ -1,6 +1,11 @@
+import classes.AutomatedTellerMachine;
 import classes.secured.AccountHolder;
 import classes.secured.BankAccount;
+import customexceptions.InsufficientBalanceException;
+import customexceptions.WithdrawalLimitExceededException;
+import threads.AtmThread;
 import threads.AtmUserThread;
+import threads.ThreadTest;
 import utilities.AccountHolderPrinter;
 import utilities.BankAccountPrinter;
 
@@ -28,38 +33,21 @@ public class MultiThreaded {
         // Account holders
         AccountHolder mike = new AccountHolder("Mike", 15000);
         AccountHolder james = new AccountHolder("James", 25000);
-        AccountHolder joshua = new AccountHolder("Joshua", 20000);
-        AccountHolder reymar = new AccountHolder("Reymar", 25000);
 
         // Bank accounts
         BankAccount mikeAcc = mike.getAccount();
         BankAccount jamesAcc = james.getAccount();
-        BankAccount joshuaAcc = joshua.getAccount();
-        BankAccount reymarAcc = reymar.getAccount();
 
         // Threads
-        Thread threadMike = new Thread(new AtmUserThread(mikeAcc));
-        Thread threadJames = new Thread(new AtmUserThread(jamesAcc));
-        Thread threadJoshua = new Thread(new AtmUserThread(joshuaAcc));
-        Thread threadReymar = new Thread(new AtmUserThread(reymarAcc));
+        ThreadTest mikeRunnable = new ThreadTest(mikeAcc);
+        ThreadTest jamesRunnable = new ThreadTest(jamesAcc);
 
+        Thread threadMike = new Thread(mikeRunnable);
+        Thread threadJames = new Thread(jamesRunnable);
 
         System.out.println("MAIN THREAD STARTED!\n");
 
-
-        AccountHolderPrinter holderPrinter = new AccountHolderPrinter(jamesAcc.getHolder());
-        BankAccountPrinter accountPrinter = new BankAccountPrinter(james.getAccount());
-
-        System.out.println("User details");
-        holderPrinter.print();
-
-        System.out.println("\nAccount details");
-        accountPrinter.print();
-
         threadMike.start();
-
-//        threadJames.start();
-//        threadJoshua.start();
-//        threadReymar.start();
+        threadJames.start();
     }
 }

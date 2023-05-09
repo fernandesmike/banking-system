@@ -25,7 +25,7 @@ public class AutomatedTellerMachine implements AtmOperations {
 
     private AutomatedTellerMachine(){}
 
-    public static AutomatedTellerMachine getInstance() {
+    public static synchronized AutomatedTellerMachine getInstance() {
         if (instance == null) {
             instance = new AutomatedTellerMachine();
         }
@@ -50,29 +50,30 @@ public class AutomatedTellerMachine implements AtmOperations {
     }
 
     @Override
-    public void insertCard(BankAccount account) {
+    public synchronized void insertCard(BankAccount account) {
+        System.out.println( "\n" + account.getHolder().getName() + "'s card has been inserted!\n");
         this.account = account;
         this.transaction = new BankAccountTransaction(account);
     }
 
     @Override
-    public void acceptDeposit(double amount) throws DepositLimitExceededException, BalanceLimitExceededException {
+    public synchronized void acceptDeposit(double amount) throws DepositLimitExceededException, BalanceLimitExceededException {
         receipt = transaction.deposit(amount);
     }
 
     @Override
-    public void acceptWithdrawal(double amount) throws WithdrawalLimitExceededException, InsufficientBalanceException {
+    public synchronized void acceptWithdrawal(double amount) throws WithdrawalLimitExceededException, InsufficientBalanceException {
         receipt = transaction.withdraw(amount);
     }
 
     @Override
-    public  void printAccountInfo() {
+    public synchronized void printAccountInfo() {
         AccountHolderPrinter printer = new AccountHolderPrinter(this.account.getHolder());
         printer.print();
     }
 
     @Override
-    public void printReceipt() {
+    public synchronized void printReceipt() {
         if (receipt != null) {
             ReceiptPrinter receiptPrinter = new ReceiptPrinter(receipt);
             receiptPrinter.print();
