@@ -1,17 +1,9 @@
 package __Test__;
 
 import classes.TransactionReceipt;
-import classes.secured.AccountHolder;
-import classes.secured.BankAccount;
-import classes.secured.BankAccountTransaction;
-import customexceptions.BalanceLimitExceededException;
-import customexceptions.DepositLimitExceededException;
-import customexceptions.InsufficientBalanceException;
-import customexceptions.WithdrawalLimitExceededException;
-import enums.TransactionType;
-import utilities.AccountHolderPrinter;
-import utilities.BankAccountPrinter;
-import utilities.ReceiptPrinter;
+import classes.secured.*;
+import customexceptions.*;
+import utilities.*;
 
 public class ReceiptTest {
     public static void main(String[] args) {
@@ -54,7 +46,6 @@ public class ReceiptTest {
         } catch (DepositLimitExceededException | BalanceLimitExceededException err) {
             System.out.println(err.getMessage());
         }
-
 
         ReceiptPrinter receiptPrinterA = new ReceiptPrinter(depositReceipt);
         ReceiptPrinter receiptPrinterB = new ReceiptPrinter(withdrawReceipt);
