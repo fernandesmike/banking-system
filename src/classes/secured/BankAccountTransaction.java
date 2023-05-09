@@ -13,7 +13,6 @@ import customexceptions.*;
 public class BankAccountTransaction implements BankOperations {
 
     private final BankAccount account;
-    private TransactionReceipt receipt;
     private TransactionType transactionType;
 
     public BankAccountTransaction(BankAccount account) {

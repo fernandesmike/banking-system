@@ -17,7 +17,7 @@ public class TransactionReceipt implements ReceiptOperations {
     private final double amount;
     private final double originalBalance;
 
-    public TransactionReceipt(BankAccount account, double amount, double originalBalance,TransactionType transactionType ) {
+    public TransactionReceipt(BankAccount account, double amount, double originalBalance, TransactionType transactionType) {
         this.account = account;
         this.transactionType = transactionType;
         this.amount = amount;
