@@ -1,16 +1,9 @@
 import classes.AutomatedTellerMachine;
 import classes.secured.AccountHolder;
 import classes.secured.BankAccount;
-import customexceptions.InsufficientBalanceException;
-import customexceptions.WithdrawalLimitExceededException;
-import threads.AtmThread;
-import threads.AtmUserThread;
 import threads.ThreadTest;
-import utilities.AccountHolderPrinter;
-import utilities.BankAccountPrinter;
 
-import java.awt.*;
-import java.sql.SQLOutput;
+import java.util.ArrayList;
 
 public class MultiThreaded {
     public static void main(String[] args) {
@@ -33,21 +26,37 @@ public class MultiThreaded {
         // Account holders
         AccountHolder mike = new AccountHolder("Mike", 15000);
         AccountHolder james = new AccountHolder("James", 25000);
+        AccountHolder reymar = new AccountHolder("Reymar", 20000);
+        AccountHolder paul = new AccountHolder("Paul", 5000);
 
         // Bank accounts
         BankAccount mikeAcc = mike.getAccount();
         BankAccount jamesAcc = james.getAccount();
+        BankAccount reymarAcc = reymar.getAccount();
+        BankAccount paulAcc = paul.getAccount();
+
+        // Singleton ATM
+        AutomatedTellerMachine atmInstance = AutomatedTellerMachine.getInstance();
+
+        // Runnable instances
+        ThreadTest mikeRunnable = new ThreadTest(mikeAcc, atmInstance);
+        ThreadTest jamesRunnable = new ThreadTest(jamesAcc, atmInstance);
+        ThreadTest reymarRunnable = new ThreadTest(reymarAcc, atmInstance);
+        ThreadTest paulRunnable = new ThreadTest(paulAcc, atmInstance);
 
         // Threads
-        ThreadTest mikeRunnable = new ThreadTest(mikeAcc);
-        ThreadTest jamesRunnable = new ThreadTest(jamesAcc);
-
         Thread threadMike = new Thread(mikeRunnable);
         Thread threadJames = new Thread(jamesRunnable);
+        Thread threadReymar = new Thread(reymarRunnable);
+        Thread threadPaul = new Thread(paulRunnable);
 
         System.out.println("MAIN THREAD STARTED!\n");
 
         threadMike.start();
         threadJames.start();
+        threadPaul.start();
+        threadReymar.start();
+
+        // TODO: Synchronization problem on ATM
     }
 }

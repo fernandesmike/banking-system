@@ -18,15 +18,10 @@ public class AtmTest {
         ReceiptPrinter receiptPrinter = null;
 
         AutomatedTellerMachine atm = AutomatedTellerMachine.getInstance();
+
+        System.out.println(atm.toString());
         atm.insertCard(account);
+        atm.printAccountInfo();
 
-        try {
-
-           atm.acceptWithdrawal(3000);
-           atm.printReceipt();
-
-        } catch (WithdrawalLimitExceededException | InsufficientBalanceException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }

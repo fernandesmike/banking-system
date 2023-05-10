@@ -7,6 +7,8 @@ import interfaces.AtmOperations;
 import utilities.AccountHolderPrinter;
 import utilities.ReceiptPrinter;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 public class AutomatedTellerMachine implements AtmOperations {
 
     /*  TODO:
@@ -21,13 +23,16 @@ public class AutomatedTellerMachine implements AtmOperations {
     private TransactionReceipt receipt;
     private BankAccountTransaction transaction;
     private BankAccount account;
-    private static AutomatedTellerMachine instance = null;
+    private static volatile AutomatedTellerMachine instance = null;
+    private final ReentrantLock atmLock = new ReentrantLock();
 
     private AutomatedTellerMachine(){}
 
-    public static synchronized AutomatedTellerMachine getInstance() {
+    public static AutomatedTellerMachine getInstance() {
         if (instance == null) {
-            instance = new AutomatedTellerMachine();
+            synchronized (AutomatedTellerMachine.class) {
+                instance = new AutomatedTellerMachine();
+            }
         }
         return instance;
     }
@@ -40,30 +45,42 @@ public class AutomatedTellerMachine implements AtmOperations {
                 =================================
                 
                 What would you like to do today?
+                
                 1) Withdraw (max. 5,000)
                 2) Deposit  (max. 10,000)
-                
-                Please insert your card...
                 
                 =================================
                 """);
     }
 
     @Override
-    public synchronized void insertCard(BankAccount account) {
-        System.out.println( "\n" + account.getHolder().getName() + "'s card has been inserted!\n");
-        this.account = account;
-        this.transaction = new BankAccountTransaction(account);
+    public void insertCard(BankAccount account) {
+        try {
+            atmLock.lock();
+            System.out.println("Please insert your card...");
+            Thread.sleep(1500);
+            System.out.println("Scanning...");
+            Thread.sleep(2000);
+            System.out.println( "\n" + account.getHolder().getName() + "'s card has been inserted!\n");
+            this.account = account;
+            this.transaction = new BankAccountTransaction(account);
+            System.out.println("Entering ATM. Please wait....\n");
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
-    public synchronized void acceptDeposit(double amount) throws DepositLimitExceededException, BalanceLimitExceededException {
+    public void acceptDeposit(double amount) throws DepositLimitExceededException, BalanceLimitExceededException {
         receipt = transaction.deposit(amount);
+        atmLock.unlock();
     }
 
     @Override
-    public synchronized void acceptWithdrawal(double amount) throws WithdrawalLimitExceededException, InsufficientBalanceException {
+    public void acceptWithdrawal(double amount) throws WithdrawalLimitExceededException, InsufficientBalanceException {
         receipt = transaction.withdraw(amount);
+        atmLock.unlock();
     }
 
     @Override
@@ -73,7 +90,8 @@ public class AutomatedTellerMachine implements AtmOperations {
     }
 
     @Override
-    public synchronized void printReceipt() {
+    public void printReceipt() {
+        atmLock.lock();
         if (receipt != null) {
             ReceiptPrinter receiptPrinter = new ReceiptPrinter(receipt);
             receiptPrinter.print();
@@ -81,5 +99,6 @@ public class AutomatedTellerMachine implements AtmOperations {
         else {
             System.out.println("No operation performed. Thank you for using our system!");
         }
+        atmLock.unlock();
     }
 }
