@@ -50,6 +50,7 @@ public class AutomatedTellerMachine implements AtmOperations {
                 2) Deposit  (max. 10,000)
                 
                 =================================
+                
                 """);
     }
 
@@ -74,13 +75,11 @@ public class AutomatedTellerMachine implements AtmOperations {
     @Override
     public void acceptDeposit(double amount) throws DepositLimitExceededException, BalanceLimitExceededException {
         receipt = transaction.deposit(amount);
-        atmLock.unlock();
     }
 
     @Override
     public void acceptWithdrawal(double amount) throws WithdrawalLimitExceededException, InsufficientBalanceException {
         receipt = transaction.withdraw(amount);
-        atmLock.unlock();
     }
 
     @Override
@@ -91,7 +90,6 @@ public class AutomatedTellerMachine implements AtmOperations {
 
     @Override
     public void printReceipt() {
-        atmLock.lock();
         if (receipt != null) {
             ReceiptPrinter receiptPrinter = new ReceiptPrinter(receipt);
             receiptPrinter.print();

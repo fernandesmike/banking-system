@@ -52,6 +52,8 @@ public class MultiThreaded {
 
         System.out.println("MAIN THREAD STARTED!\n");
 
+        atmInstance.showMenu();
+
         threadMike.start();
         threadJames.start();
         threadPaul.start();
