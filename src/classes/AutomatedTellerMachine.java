@@ -93,6 +93,7 @@ public class AutomatedTellerMachine implements AtmOperations {
         if (receipt != null) {
             ReceiptPrinter receiptPrinter = new ReceiptPrinter(receipt);
             receiptPrinter.print();
+            System.out.println("\nLeaving ATM\n");
         }
         else {
             System.out.println("No operation performed. Thank you for using our system!");

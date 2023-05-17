@@ -10,7 +10,8 @@ public class MultiThreaded {
         /*
         *   TODO:
         *
-        *   Create multiple account holders
+        *   Create multiple account ho
+        * lders
         *   Create multiple threads
         *   The ATM should be on the main Thread
         *
@@ -58,7 +59,5 @@ public class MultiThreaded {
         threadJames.start();
         threadPaul.start();
         threadReymar.start();
-
-        // TODO: Synchronization problem on ATM
     }
 }

@@ -26,7 +26,6 @@ public class ThreadTest implements Runnable {
             atmInstance.insertCard(account);
             atmInstance.acceptWithdrawal(4000);
             atmInstance.printReceipt();
-            System.out.println("\nLeaving ATM\n");
             Thread.sleep(5000);
         } catch (InterruptedException | WithdrawalLimitExceededException | InsufficientBalanceException e) {
             System.out.println(e.getMessage());
